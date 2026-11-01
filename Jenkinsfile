@@ -22,14 +22,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo '🔨 Compiling the project...'
-                sh 'mvn clean compile -q'
+                bat 'mvn clean compile -q'
             }
         }
 
         stage('Unit Tests') {
             steps {
                 echo '🧪 Running JUnit 5 tests...'
-                sh 'mvn test'
+                bat 'mvn test'
             }
             post {
                 always {
@@ -42,7 +42,7 @@ pipeline {
         stage('Package') {
             steps {
                 echo '📦 Packaging application into JAR...'
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
             post {
                 success {
@@ -54,7 +54,7 @@ pipeline {
         stage('Code Quality Check') {
             steps {
                 echo '🔍 Running checkstyle / static analysis...'
-                sh 'mvn verify -DskipTests'
+                bat 'mvn verify -DskipTests'
             }
         }
     }
