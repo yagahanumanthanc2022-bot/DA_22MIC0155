@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Leave Request - Management Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
+            --secondary: #0f172a;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--slate-800);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        .hidden { display: none !important; }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            padding: 8px 15px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            text-decoration: none;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: var(--slate-700);
+            border-color: var(--slate-300);
+        }
+        .btn-secondary:hover {
+            background-color: var(--slate-100);
+            border-color: var(--slate-400);
+        }
+
+        .btn-back {
+            background-color: #f1f5f9;
+            color: var(--slate-700);
+            border: 1px solid var(--slate-300);
+            font-size: 13px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-back:hover {
+            background-color: #e2e8f0;
+            color: var(--slate-900);
+            transform: translateX(-2px);
+        }
+
+        .btn-erase {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+            font-size: 13px;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            transition: all 0.15s;
+        }
+        .btn-erase:hover {
+            background-color: #fecaca;
+            color: #7f1d1d;
+        }
+
+        .btn-success { background-color: var(--success); color: #ffffff; }
+        .btn-success:hover { background-color: #15803d; }
+
+        .btn-danger { background-color: var(--danger); color: #ffffff; }
+        .btn-danger:hover { background-color: #b91c1c; }
+
+        .btn-sm { padding: 5px 11px; font-size: 12px; }
+
+        /* -------------------------------------------------------------
+           LOGIN SCREEN
+        ------------------------------------------------------------- */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .auth-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            border: 1px solid var(--slate-200);
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .auth-header {
+            padding: 32px 32px 16px;
+            text-align: center;
+        }
+
+        .brand-logo {
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            border-radius: var(--radius-lg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .auth-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--slate-900);
+            letter-spacing: -0.5px;
+        }
+
+        .auth-header p {
+            font-size: 13px;
+            color: var(--slate-500);
+            margin-top: 4px;
+        }
+
+        .auth-body {
+            padding: 0 32px 32px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--slate-700);
+            margin-bottom: 6px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 14px;
+            border: 1px solid var(--slate-300);
+            border-radius: var(--radius-md);
+            color: var(--slate-900);
+            outline: none;
+            transition: all 0.2s;
+            background: #ffffff;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--slate-500);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 4px;
+            user-select: none;
+        }
+        .toggle-password:hover {
+            color: var(--primary);
+            background: var(--slate-100);
+        }
+
+        .demo-selector {
+            background-color: var(--slate-50);
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            margin-top: 20px;
+        }
+
+        .demo-selector-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--slate-500);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .demo-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .demo-chip {
+            background: #ffffff;
+            border: 1px solid var(--slate-300);
+            border-radius: var(--radius-md);
+            padding: 9px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .demo-chip:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .demo-chip-left {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .demo-chip-role {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .demo-chip-desc {
+            font-size: 11px;
+            color: var(--slate-500);
+        }
+
+        .alert-box {
+            padding: 10px 14px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-error {
+            background-color: var(--danger-light);
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* -------------------------------------------------------------
+           PORTAL & NAVBAR
+        ------------------------------------------------------------- */
+        .portal-layout {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            border-bottom: 1px solid var(--slate-200);
+            padding: 0 28px;
+            height: 66px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-brand-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .nav-brand-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 5px;
+            background: var(--primary-light);
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .nav-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .profile-info {
+            text-align: right;
+        }
+
+        .profile-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--slate-900);
+        }
+
+        .role-pill {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .role-admin { background: #f3e8ff; color: #7e22ce; }
+        .role-manager { background: #e0f2fe; color: #0369a1; }
+        .role-employee { background: #ecfdf5; color: #047857; }
+
+        .avatar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            flex: 1;
+            padding: 28px;
+            max-width: 1240px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* NOTIFICATION BANNER */
+        .notification-card {
+            padding: 14px 20px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.3s ease-out;
+        }
+        .notif-approved {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+        }
+        .notif-rejected {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .page-header h2 {
+            font-size: 21px;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .page-header p {
+            font-size: 13px;
+            color: var(--slate-500);
+            margin-top: 2px;
+        }
+
+        /* STATS GRID */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .stat-card-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .stat-card-subtitle {
+            font-size: 12px;
+            color: var(--slate-500);
+            margin-top: 4px;
+        }
+
+        /* TABLES */
+        .table-container {
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead {
+            background-color: var(--slate-50);
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        th {
+            padding: 12px 18px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 18px;
+            font-size: 13px;
+            color: var(--slate-700);
+            border-bottom: 1px solid var(--slate-100);
+            vertical-align: middle;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tbody tr:hover { background-color: var(--slate-50); }
+
+        /* STATUS BADGES */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .status-pending { background-color: var(--warning-light); color: #b45309; border: 1px solid #fde68a; }
+        .status-approved { background-color: var(--success-light); color: #15803d; border: 1px solid #bbf7d0; }
+        .status-rejected { background-color: var(--danger-light); color: #b91c1c; border: 1px solid #fecaca; }
+
+        .empty-state {
+            padding: 44px;
+            text-align: center;
+            color: var(--slate-400);
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 50;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--slate-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 { font-size: 17px; font-weight: 700; color: var(--slate-900); }
+
+        .modal-body { padding: 20px 24px; }
+        .modal-footer {
+            padding: 14px 24px;
+            background-color: var(--slate-50);
+            border-top: 1px solid var(--slate-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        select.form-control, textarea.form-control, input.form-control {
+            width: 100%;
+            padding: 9px 12px;
+            font-size: 13px;
+            border: 1px solid var(--slate-300);
+            border-radius: var(--radius-md);
+            color: var(--slate-900);
+            outline: none;
+            background: #ffffff;
+        }
+
+        .duration-preview {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 7px 12px;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .toast {
+            background: var(--slate-900);
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: slideIn 0.25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.99); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==============================================================
+         1. LOGIN SCREEN WITH PASSWORD TOGGLE & ROLE EXPLANATIONS
+    ============================================================== -->
+    <div id="authScreen" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="brand-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <h1>Employee Leave Request</h1>
+                <p>Enterprise Leave Governance & Approval System</p>
+            </div>
+
+            <div class="auth-body">
+                <div id="loginAlert" class="alert-box alert-error hidden">
+                    <span id="loginAlertText"></span>
+                </div>
+
+                <form id="loginForm" onsubmit="handleAuthLogin(event)">
+                    <div class="form-group">
+                        <label for="inputEmail">Work Email</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="inputEmail" required placeholder="name@company.com" autocomplete="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPassword">Password</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="inputPassword" required placeholder="Enter password" autocomplete="current-password">
+                            <button type="button" class="toggle-password" id="btnTogglePassword" onclick="togglePasswordVisibility()" title="View or hide password">
+                                <span id="pwdEyeIcon">👁️</span>
+                                <span id="pwdToggleText">Show</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btnLoginSubmit" class="btn btn-primary" style="width: 100%; padding: 11px; margin-top: 6px;">
+                        <span id="btnLoginText">Sign In</span>
+                    </button>
+                </form>
+
+                <!-- 1-Click Role Profiles with clear role explanations -->
+                <div class="demo-selector">
+                    <div class="demo-selector-title">
+                        <span>Select User Persona</span>
+                        <span style="font-size: 10px; color: var(--slate-400); text-transform: none;">Click to sign in as:</span>
+                    </div>
+                    <div class="demo-chips">
+                        <div class="demo-chip" onclick="applyDemoCreds('employee@leave.com', 'Employee@123')">
+                            <div class="demo-chip-left">
+                                <span class="demo-chip-role" style="color: #047857;">Employee User (employee@leave.com)</span>
+                                <span class="demo-chip-desc">Applies for leave & checks manager's decision</span>
+                            </div>
+                            <span class="btn-sm btn-secondary">Select</span>
+                        </div>
+                        <div class="demo-chip" onclick="applyDemoCreds('manager@leave.com', 'Manager@123')">
+                            <div class="demo-chip-left">
+                                <span class="demo-chip-role" style="color: #0369a1;">Manager User (manager@leave.com)</span>
+                                <span class="demo-chip-desc">Approves or Rejects employee leave requests</span>
+                            </div>
+                            <span class="btn-sm btn-secondary">Select</span>
+                        </div>
+                        <div class="demo-chip" onclick="applyDemoCreds('admin@leave.com', 'Admin@123')">
+                            <div class="demo-chip-left">
+                                <span class="demo-chip-role" style="color: #7e22ce;">Admin User (admin@leave.com)</span>
+                                <span class="demo-chip-desc">Auditor: Views all records & erases all leave data</span>
+                            </div>
+                            <span class="btn-sm btn-secondary">Select</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==============================================================
+         2. MAIN DASHBOARD: STRICT ROLE SEPARATION
+    ============================================================== -->
+    <div id="portalScreen" class="portal-layout hidden">
+        <!-- TOP NAVBAR -->
+        <header class="navbar">
+            <div class="nav-left">
+                <!-- GO BACK BUTTON -->
+                <button class="btn-back" onclick="handleGoBack()" title="Return to Sign In page">
+                    &larr; Go Back
+                </button>
+
+                <div class="nav-brand">
+                    <div class="brand-logo" style="width: 32px; height: 32px; margin-bottom: 0; box-shadow: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                        </svg>
+                    </div>
+                    <span class="nav-brand-title">Employee Leave Request</span>
+                    <span class="nav-brand-badge" id="roleBadgeHeader">PORTAL</span>
+                </div>
+            </div>
+
+            <div class="nav-profile">
+                <!-- CLEAR ALL LEAVE DATA BUTTON IN NAVBAR -->
+                <button class="btn-erase" onclick="handleEraseAllLeaves()" style="font-size: 12px; padding: 5px 12px;" title="Clear all leave request data in database">
+                    🗑️ Clear All Leaves
+                </button>
+                <div class="profile-info">
+                    <div id="navUserName" class="profile-name">User Name</div>
+                    <div id="navRoleBadge" class="role-pill role-employee">EMPLOYEE</div>
+                </div>
+                <div id="navAvatar" class="avatar-circle">U</div>
+                <button class="btn btn-secondary btn-sm" onclick="handleLogout()" title="Log out">
+                    Sign Out
+                </button>
+            </div>
+        </header>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="main-content">
+
+            <!-- ==============================================================
+                 A. EMPLOYEE VIEW (ONLY ASKS FOR LEAVE & SEES MANAGER'S ACTION)
+            ============================================================== -->
+            <div id="employeeSection" class="hidden">
+                <!-- NOTIFICATION BANNER (Shows when manager approves or rejects) -->
+                <div id="employeeDecisionAlert" class="notification-card hidden">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span id="notifIcon" style="font-size: 24px;">🔔</span>
+                        <div>
+                            <strong id="notifTitle" style="font-size: 14px; display: block;">Leave Decision</strong>
+                            <span id="notifMessage" style="font-size: 13px;">Your manager has updated your request.</span>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-sm btn-secondary" onclick="dismissDecisionAlert()">Dismiss</button>
+                </div>
+
+                <div class="page-header">
+                    <div>
+                        <h2>My Leave Requests</h2>
+                        <p>Submit your leave request to your manager and track their decision.</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-erase" onclick="handleEraseAllLeaves()" title="Clear all leave records">
+                            🗑️ Clear All Leaves
+                        </button>
+                        <button class="btn btn-primary" onclick="openLeaveModal()">
+                            + Apply for Leave
+                        </button>
+                    </div>
+                </div>
+
+                <!-- EMPLOYEE STATS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Annual Leave Balance</span>
+                            <div style="font-size: 18px;">🏖️</div>
+                        </div>
+                        <div class="stat-card-value" id="empStatAnnual">20 <span style="font-size: 14px; color: var(--slate-400); font-weight: 500;">/ 20 days</span></div>
+                        <div class="stat-card-subtitle">Paid vacation quota</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Sick / Casual Balance</span>
+                            <div style="font-size: 18px;">🏥</div>
+                        </div>
+                        <div class="stat-card-value" id="empStatSick">15 <span style="font-size: 14px; color: var(--slate-400); font-weight: 500;">/ 15 days</span></div>
+                        <div class="stat-card-subtitle">Medical & emergency quota</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Approved by Manager</span>
+                            <div style="font-size: 18px;">✅</div>
+                        </div>
+                        <div class="stat-card-value" id="empStatApproved">0</div>
+                        <div class="stat-card-subtitle">Approved requests</div>
+                    </div>
+                </div>
+
+                <!-- EMPLOYEE TABLE: SHOWS ONLY WHAT MANAGER GIVES, NO APPROVE/REJECT BUTTONS -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Leave Category</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Days</th>
+                                <th>Reason</th>
+                                <th>Manager Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                    <div id="employeeEmpty" class="empty-state hidden">
+                        <div style="font-size: 32px; margin-bottom: 6px;">📋</div>
+                        <h3 style="font-size: 15px; color: var(--slate-700);">No leave requests submitted yet</h3>
+                        <p style="font-size: 13px; margin-top: 4px;">Click "+ Apply for Leave" above to send a request to your manager.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ==============================================================
+                 B. MANAGER VIEW (APPROVES OR REJECTS EMPLOYEE LEAVES)
+            ============================================================== -->
+            <div id="managerSection" class="hidden">
+                <div class="page-header">
+                    <div>
+                        <h2>Team Leave Approvals (Manager Portal)</h2>
+                        <p>Review incoming employee leave requests and take action (Approve or Reject).</p>
+                    </div>
+                    <button class="btn-back" onclick="loadManagerLeaves()" title="Refresh requests">
+                        🔄 Refresh List
+                    </button>
+                </div>
+
+                <!-- MANAGER STATS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Requests Awaiting Decision</span>
+                            <div style="font-size: 18px;">⏳</div>
+                        </div>
+                        <div class="stat-card-value" id="mgrPendingCount" style="color: #d97706;">0</div>
+                        <div class="stat-card-subtitle">Require your review</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Total Approved by You</span>
+                            <div style="font-size: 18px;">✅</div>
+                        </div>
+                        <div class="stat-card-value" id="mgrApprovedCount" style="color: #16a34a;">0</div>
+                        <div class="stat-card-subtitle">Approved requests</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Total Rejected by You</span>
+                            <div style="font-size: 18px;">❌</div>
+                        </div>
+                        <div class="stat-card-value" id="mgrRejectedCount" style="color: #dc2626;">0</div>
+                        <div class="stat-card-subtitle">Declined requests</div>
+                    </div>
+                </div>
+
+                <!-- MANAGER REVIEW TABLE (HAS APPROVE & REJECT BUTTONS) -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Type</th>
+                                <th>Dates</th>
+                                <th>Days</th>
+                                <th>Employee Reason</th>
+                                <th style="text-align: right;">Manager Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="managerTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                    <div id="managerEmpty" class="empty-state hidden">
+                        <div style="font-size: 32px; margin-bottom: 6px;">✨</div>
+                        <h3 style="font-size: 15px; color: var(--slate-700);">No pending employee requests</h3>
+                        <p style="font-size: 13px; margin-top: 4px;">All submitted employee leaves have already been reviewed.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ==============================================================
+                 C. ADMIN VIEW (VIEW-ONLY AUDITOR + ERASE ALL LEAVES BUTTON)
+            ============================================================== -->
+            <div id="adminSection" class="hidden">
+                <div class="page-header">
+                    <div>
+                        <h2>Company Leave Audit Records (Admin - View Only)</h2>
+                        <p>View-only overview of all company leaves across all employees and managers.</p>
+                    </div>
+                    <!-- CLEAR ALL LEAVE RECORDS BUTTON -->
+                    <button class="btn-erase" onclick="handleEraseAllLeaves()" title="Clear all leave records alone">
+                        🗑️ Erase All Leave Details
+                    </button>
+                </div>
+
+                <!-- ADMIN STATS -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Total Company Requests</span>
+                            <div style="font-size: 18px;">📊</div>
+                        </div>
+                        <div class="stat-card-value" id="admTotalCount">0</div>
+                        <div class="stat-card-subtitle">All submissions</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Approved Leaves</span>
+                            <div style="font-size: 18px;">✅</div>
+                        </div>
+                        <div class="stat-card-value" id="admApprovedCount" style="color: #16a34a;">0</div>
+                        <div class="stat-card-subtitle">Approved by managers</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Pending Decisions</span>
+                            <div style="font-size: 18px;">⏳</div>
+                        </div>
+                        <div class="stat-card-value" id="admPendingCount" style="color: #d97706;">0</div>
+                        <div class="stat-card-subtitle">Awaiting manager action</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <span class="stat-card-title">Rejected Leaves</span>
+                            <div style="font-size: 18px;">❌</div>
+                        </div>
+                        <div class="stat-card-value" id="admRejectedCount" style="color: #dc2626;">0</div>
+                        <div class="stat-card-subtitle">Declined submissions</div>
+                    </div>
+                </div>
+
+                <!-- ADMIN AUDIT TABLE (VIEW ONLY: NO ACTION BUTTONS) -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ref #</th>
+                                <th>Employee</th>
+                                <th>Role</th>
+                                <th>Category</th>
+                                <th>Dates</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>Manager Decision & Reviewer</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                    <div id="adminEmpty" class="empty-state hidden">
+                        <div style="font-size: 32px; margin-bottom: 6px;">📂</div>
+                        <h3 style="font-size: 15px; color: var(--slate-700);">No leave records in system</h3>
+                        <p style="font-size: 13px; margin-top: 4px;">Leave database is currently empty.</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+
+    <!-- ==============================================================
+         3. APPLY LEAVE MODAL (FOR EMPLOYEE ONLY)
+    ============================================================== -->
+    <div id="leaveModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button type="button" class="btn-back" onclick="closeLeaveModal()">
+                        &larr; Go Back
+                    </button>
+                    <h3>Apply for Leave</h3>
+                </div>
+                <button type="button" class="btn-close" onclick="closeLeaveModal()" style="border:none; background:none; font-size:22px; cursor:pointer;">&times;</button>
+            </div>
+            <form id="leaveApplicationForm" onsubmit="handleApplyLeave(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modalLeaveType">Leave Category</label>
+                        <select id="modalLeaveType" class="form-control" required>
+                            <option value="Annual">Annual Leave (Vacation)</option>
+                            <option value="Sick">Sick Leave</option>
+                            <option value="Casual">Casual Leave</option>
+                        </select>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+                        <div class="form-group">
+                            <label for="modalStartDate">Start Date</label>
+                            <input type="date" id="modalStartDate" class="form-control" required onchange="calculateDuration()">
+                        </div>
+                        <div class="form-group">
+                            <label for="modalEndDate">End Date</label>
+                            <input type="date" id="modalEndDate" class="form-control" required onchange="calculateDuration()">
+                        </div>
+                    </div>
+
+                    <div id="durationNotice" class="duration-preview hidden">
+                        <span>🗓️</span> <span id="durationNoticeText">Duration: 1 working day</span>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 14px;">
+                        <label for="modalReason">Reason for Manager</label>
+                        <textarea id="modalReason" class="form-control" rows="3" placeholder="Provide reason for your manager..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeLeaveModal()">
+                        &larr; Go Back
+                    </button>
+                    <button type="submit" id="btnSubmitLeave" class="btn btn-primary">
+                        Send Request to Manager
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST CONTAINER -->
+    <div id="toastContainer" class="toast-container"></div>
+
+
+    <!-- ==============================================================
+         4. SCRIPT LOGIC
+    ============================================================== -->
+    <script>
+        let currentUser = null;
+        let authToken = null;
+        let pollingTimer = null;
+        let previousStatusMap = {};
+
+        // On Page Load: Check existing session
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedToken = localStorage.getItem('leave_jwt');
+            const savedUser = localStorage.getItem('leave_user');
+
+            if (savedToken && savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    authToken = savedToken;
+                    launchPortal();
+                    return;
+                } catch (e) {
+                    localStorage.removeItem('leave_jwt');
+                    localStorage.removeItem('leave_user');
+                }
+            }
+
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('portalScreen').classList.add('hidden');
+        });
+
+        // 1-Click Demo Profiles
+        function applyDemoCreds(email, password) {
+            document.getElementById('inputEmail').value = email;
+            document.getElementById('inputPassword').value = password;
+            hideLoginAlert();
+            document.getElementById('btnLoginSubmit').click();
+        }
+
+        // Toggle Password visibility (Eye Icon)
+        function togglePasswordVisibility() {
+            const pwd = document.getElementById('inputPassword');
+            const eye = document.getElementById('pwdEyeIcon');
+            const text = document.getElementById('pwdToggleText');
+
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                eye.textContent = '🙈';
+                text.textContent = 'Hide';
+            } else {
+                pwd.type = 'password';
+                eye.textContent = '👁️';
+                text.textContent = 'Show';
+            }
+        }
+
+        function showLoginAlert(msg) {
+            const box = document.getElementById('loginAlert');
+            document.getElementById('loginAlertText').textContent = msg;
+            box.classList.remove('hidden');
+        }
+
+        function hideLoginAlert() {
+            document.getElementById('loginAlert').classList.add('hidden');
+        }
+
+        // Sign In
+        async function handleAuthLogin(e) {
+            e.preventDefault();
+            hideLoginAlert();
+
+            const email = document.getElementById('inputEmail').value.trim();
+            const password = document.getElementById('inputPassword').value;
+
+            const btn = document.getElementById('btnLoginSubmit');
+            const btnText = document.getElementById('btnLoginText');
+            btn.disabled = true;
+            btnText.textContent = 'Signing in...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.token) {
+                    authToken = data.token;
+                    currentUser = {
+                        name: data.name,
+                        email: data.email,
+                        role: data.role || 'EMPLOYEE'
+                    };
+
+                    localStorage.setItem('leave_jwt', authToken);
+                    localStorage.setItem('leave_user', JSON.stringify(currentUser));
+
+                    showToast(`Logged in as ${currentUser.name} (${currentUser.role})`);
+                    launchPortal();
+                } else {
+                    showLoginAlert(data.message || 'Invalid email or password.');
+                }
+            } catch (err) {
+                showLoginAlert('Unable to reach server. Please run Spring Boot.');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Sign In';
+            }
+        }
+
+        // Go Back navigation
+        function handleGoBack() {
+            if (confirm('Return to Sign In page?')) {
+                handleLogout();
+            }
+        }
+
+        // Logout
+        function handleLogout() {
+            if (pollingTimer) clearInterval(pollingTimer);
+            localStorage.removeItem('leave_jwt');
+            localStorage.removeItem('leave_user');
+            currentUser = null;
+            authToken = null;
+            previousStatusMap = {};
+
+            document.getElementById('portalScreen').classList.add('hidden');
+            document.getElementById('authScreen').classList.remove('hidden');
+            showToast('Returned to Sign In');
+        }
+
+        // Launch Portal based on STRICT role
+        function launchPortal() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('portalScreen').classList.remove('hidden');
+
+            const role = (currentUser.role || 'EMPLOYEE').toUpperCase();
+
+            // Setup Header Profile
+            document.getElementById('navUserName').textContent = currentUser.name || currentUser.email;
+            const roleBadge = document.getElementById('navRoleBadge');
+            roleBadge.textContent = role;
+            roleBadge.className = 'role-pill ' + (
+                role === 'ADMIN' ? 'role-admin' :
+                role === 'MANAGER' ? 'role-manager' : 'role-employee'
+            );
+
+            document.getElementById('roleBadgeHeader').textContent = role + ' PORTAL';
+            document.getElementById('navAvatar').textContent = (currentUser.name || 'U').charAt(0).toUpperCase();
+
+            // Hide all sections first
+            document.getElementById('employeeSection').classList.add('hidden');
+            document.getElementById('managerSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.add('hidden');
+
+            // Strictly display ONLY what belongs to this role:
+            if (role === 'EMPLOYEE') {
+                document.getElementById('employeeSection').classList.remove('hidden');
+                loadEmployeeLeaves();
+
+                // Live polling so employee sees manager's decision in real-time
+                if (pollingTimer) clearInterval(pollingTimer);
+                pollingTimer = setInterval(() => loadEmployeeLeaves(true), 4000);
+
+            } else if (role === 'MANAGER') {
+                document.getElementById('managerSection').classList.remove('hidden');
+                loadManagerLeaves();
+
+                if (pollingTimer) clearInterval(pollingTimer);
+                pollingTimer = setInterval(() => loadManagerLeaves(true), 4000);
+
+            } else if (role === 'ADMIN') {
+                document.getElementById('adminSection').classList.remove('hidden');
+                loadAdminAuditLeaves();
+
+                if (pollingTimer) clearInterval(pollingTimer);
+                pollingTimer = setInterval(() => loadAdminAuditLeaves(true), 4000);
+            }
+
+            // Date limits
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('modalStartDate').min = today;
+            document.getElementById('modalEndDate').min = today;
+        }
+
+
+        // ==============================================================
+        // 1. EMPLOYEE LOGIC: ONLY ASKS LEAVE & SEES MANAGER'S ACTION
+        // ==============================================================
+        async function loadEmployeeLeaves(isPoll = false) {
+            try {
+                const res = await fetch('/api/leave/my-leaves', {
+                    headers: { 'Authorization': 'Bearer ' + authToken }
+                });
+
+                if (res.status === 401 || res.status === 403) {
+                    handleLogout();
+                    return;
+                }
+
+                const leaves = await res.json();
+
+                // Check for new decision from manager
+                leaves.forEach(item => {
+                    const prev = previousStatusMap[item.id];
+                    if (prev && prev === 'PENDING' && item.status !== 'PENDING') {
+                        triggerDecisionNotification(item);
+                    }
+                    previousStatusMap[item.id] = item.status;
+                });
+
+                renderEmployeeTable(leaves);
+            } catch (err) {
+                if (!isPoll) console.error(err);
+            }
+        }
+
+        function renderEmployeeTable(leaves) {
+            const tbody = document.getElementById('employeeTableBody');
+            const empty = document.getElementById('employeeEmpty');
+            tbody.innerHTML = '';
+
+            let approvedCount = 0;
+            let approvedDays = 0;
+
+            if (!leaves || leaves.length === 0) {
+                empty.classList.remove('hidden');
+                document.getElementById('empStatApproved').textContent = '0';
+                document.getElementById('empStatAnnual').innerHTML = `20 <span style="font-size: 14px; color: var(--slate-400); font-weight: 500;">/ 20 days</span>`;
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            // Find most recent reviewed leave for banner
+            const reviewed = leaves.filter(l => l.status === 'APPROVED' || l.status === 'REJECTED');
+            if (reviewed.length > 0) {
+                const latest = reviewed[reviewed.length - 1];
+                if (!sessionStorage.getItem(`dismissed_leave_${latest.id}_${latest.status}`)) {
+                    displayDecisionBanner(latest);
+                }
+            }
+
+            leaves.forEach(item => {
+                const status = (item.status || 'PENDING').toUpperCase();
+
+                if (status === 'APPROVED') {
+                    approvedCount++;
+                    approvedDays += (item.days || 0);
+                }
+
+                // Display manager's action clearly to employee
+                let managerActionCell = '';
+                if (status === 'APPROVED') {
+                    managerActionCell = `
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <span class="status-badge status-approved">✅ Approved by Manager</span>
+                            ${item.managerComments ? `<span style="font-size: 12px; color: #15803d; font-style: italic;">💬 "${item.managerComments}"</span>` : ''}
+                        </div>
+                    `;
+                } else if (status === 'REJECTED') {
+                    managerActionCell = `
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <span class="status-badge status-rejected">❌ Rejected by Manager</span>
+                            ${item.managerComments ? `<span style="font-size: 12px; color: #b91c1c; font-style: italic;">💬 "${item.managerComments}"</span>` : ''}
+                        </div>
+                    `;
+                } else {
+                    // Pending decision from manager
+                    managerActionCell = '<span class="status-badge status-pending">⏳ Awaiting Manager Decision</span>';
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600; color: var(--slate-900);">#LV-${item.id}</td>
+                    <td><strong>${item.leaveType}</strong></td>
+                    <td>${item.startDate}</td>
+                    <td>${item.endDate}</td>
+                    <td><strong>${item.days} ${item.days > 1 ? 'days' : 'day'}</strong></td>
+                    <td style="max-width: 240px; font-size: 12px;">${item.reason || '-'}</td>
+                    <td>${managerActionCell}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('empStatApproved').textContent = approvedCount;
+            const remainingAnnual = Math.max(0, 20 - approvedDays);
+            document.getElementById('empStatAnnual').innerHTML = `${remainingAnnual} <span style="font-size: 14px; color: var(--slate-400); font-weight: 500;">/ 20 days</span>`;
+        }
+
+        function triggerDecisionNotification(item) {
+            if (item.status === 'APPROVED') {
+                showToast(`🎉 Your leave #LV-${item.id} was APPROVED by your manager!`);
+            } else {
+                showToast(`⚠️ Your leave #LV-${item.id} was REJECTED by your manager.`);
+            }
+            displayDecisionBanner(item);
+        }
+
+        function displayDecisionBanner(item) {
+            const banner = document.getElementById('employeeDecisionAlert');
+            const icon = document.getElementById('notifIcon');
+            const title = document.getElementById('notifTitle');
+            const msg = document.getElementById('notifMessage');
+
+            banner.classList.remove('hidden');
+            banner.setAttribute('data-id', item.id);
+            banner.setAttribute('data-status', item.status);
+
+            const commentsText = item.managerComments ? ` Remarks: "${item.managerComments}"` : '';
+
+            if (item.status === 'APPROVED') {
+                banner.className = 'notification-card notif-approved';
+                icon.textContent = '🎉';
+                title.textContent = `Leave Request #LV-${item.id} was APPROVED by Manager!`;
+                msg.textContent = `Approved for ${item.startDate} to ${item.endDate} (${item.days} days).${commentsText}`;
+            } else {
+                banner.className = 'notification-card notif-rejected';
+                icon.textContent = '⚠️';
+                title.textContent = `Leave Request #LV-${item.id} was REJECTED by Manager`;
+                msg.textContent = `Your manager declined this request.${commentsText}`;
+            }
+        }
+
+        function dismissDecisionAlert() {
+            const banner = document.getElementById('employeeDecisionAlert');
+            const id = banner.getAttribute('data-id');
+            const status = banner.getAttribute('data-status');
+            if (id && status) {
+                sessionStorage.setItem(`dismissed_leave_${id}_${status}`, 'true');
+            }
+            banner.classList.add('hidden');
+        }
+
+
+        // ==============================================================
+        // 2. MANAGER LOGIC: APPROVE OR REJECT EMPLOYEE LEAVES
+        // ==============================================================
+        async function loadManagerLeaves(isPoll = false) {
+            try {
+                // Fetch pending leaves
+                const res = await fetch('/api/leave/pending', {
+                    headers: { 'Authorization': 'Bearer ' + authToken }
+                });
+
+                if (!res.ok) return;
+                const pending = await res.json();
+                renderManagerTable(pending);
+
+                // Fetch all leaves to update manager stats
+                const allRes = await fetch('/api/leave/all', {
+                    headers: { 'Authorization': 'Bearer ' + authToken }
+                });
+                if (allRes.ok) {
+                    const all = await allRes.json();
+                    let appCount = 0;
+                    let rejCount = 0;
+                    all.forEach(l => {
+                        if (l.status === 'APPROVED') appCount++;
+                        if (l.status === 'REJECTED') rejCount++;
+                    });
+                    document.getElementById('mgrApprovedCount').textContent = appCount;
+                    document.getElementById('mgrRejectedCount').textContent = rejCount;
+                }
+            } catch (err) {
+                if (!isPoll) console.error(err);
+            }
+        }
+
+        function renderManagerTable(pending) {
+            const tbody = document.getElementById('managerTableBody');
+            const empty = document.getElementById('managerEmpty');
+            tbody.innerHTML = '';
+
+            document.getElementById('mgrPendingCount').textContent = pending ? pending.length : 0;
+
+            if (!pending || pending.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            pending.forEach(item => {
+                const tr = document.createElement('tr');
+                const empName = item.user ? item.user.name : 'Employee User';
+                const empDept = item.user ? item.user.department : 'IT';
+
+                tr.innerHTML = `
+                    <td style="font-weight: 600;">#LV-${item.id}</td>
+                    <td><strong>${empName}</strong></td>
+                    <td>${empDept}</td>
+                    <td><strong>${item.leaveType}</strong></td>
+                    <td>${item.startDate} &rarr; ${item.endDate}</td>
+                    <td><strong>${item.days} ${item.days > 1 ? 'days' : 'day'}</strong></td>
+                    <td style="max-width: 200px; font-size: 12px;">${item.reason || '-'}</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                        <input type="text" id="mgr_comment_${item.id}" placeholder="Optional remark..." style="padding: 5px 8px; font-size: 11px; width: 130px; border: 1px solid var(--slate-300); border-radius: 4px; margin-right: 6px; outline: none;">
+                        <button class="btn btn-success btn-sm" onclick="managerReviewLeave(${item.id}, 'approve')" style="margin-right: 4px;">
+                            Approve
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="managerReviewLeave(${item.id}, 'reject')">
+                            Reject
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function managerReviewLeave(id, action) {
+            const input = document.getElementById('mgr_comment_' + id);
+            const userText = input ? input.value.trim() : '';
+            const comments = userText || (action === 'approve' ? 'Approved by manager' : 'Rejected by manager');
+
+            try {
+                const res = await fetch(`/api/leave/${action}/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + (authToken || ''),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ comments })
+                });
+
+                if (res.ok) {
+                    showToast(`Leave #LV-${id} was ${action.toUpperCase()}D successfully!`);
+                    loadManagerLeaves();
+                } else {
+                    const errorText = await res.text();
+                    showToast(`Error: ${errorText || 'Action failed.'}`);
+                }
+            } catch (err) {
+                console.error("Action error:", err);
+                showToast('Network error while processing review.');
+            }
+        }
+
+
+        // ==============================================================
+        // 3. ADMIN LOGIC: AUDIT VIEW-ONLY & ERASE ALL LEAVE DATA
+        // ==============================================================
+        async function loadAdminAuditLeaves(isPoll = false) {
+            try {
+                const res = await fetch('/api/leave/all', {
+                    headers: { 'Authorization': 'Bearer ' + authToken }
+                });
+
+                if (!res.ok) return;
+                const list = await res.json();
+                renderAdminTable(list);
+            } catch (err) {
+                if (!isPoll) console.error(err);
+            }
+        }
+
+        function renderAdminTable(list) {
+            const tbody = document.getElementById('adminTableBody');
+            const empty = document.getElementById('adminEmpty');
+            tbody.innerHTML = '';
+
+            let total = list.length;
+            let approved = 0;
+            let pending = 0;
+            let rejected = 0;
+
+            if (total === 0) {
+                empty.classList.remove('hidden');
+                document.getElementById('admTotalCount').textContent = '0';
+                document.getElementById('admApprovedCount').textContent = '0';
+                document.getElementById('admPendingCount').textContent = '0';
+                document.getElementById('admRejectedCount').textContent = '0';
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            list.forEach(item => {
+                if (item.status === 'APPROVED') approved++;
+                else if (item.status === 'REJECTED') rejected++;
+                else pending++;
+
+                const empName = item.user ? item.user.name : 'Unknown';
+                const empRole = item.user ? item.user.role : 'EMPLOYEE';
+                const reviewer = item.reviewedBy ? item.reviewedBy.name : '—';
+                const comments = item.managerComments ? ` - "${item.managerComments}"` : '';
+
+                let statusBadge = '<span class="status-badge status-pending">PENDING</span>';
+                if (item.status === 'APPROVED') statusBadge = '<span class="status-badge status-approved">APPROVED</span>';
+                else if (item.status === 'REJECTED') statusBadge = '<span class="status-badge status-rejected">REJECTED</span>';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600;">#LV-${item.id}</td>
+                    <td><strong>${empName}</strong></td>
+                    <td><span class="role-pill role-${empRole.toLowerCase()}">${empRole}</span></td>
+                    <td>${item.leaveType}</td>
+                    <td>${item.startDate} &rarr; ${item.endDate}</td>
+                    <td>${item.days} days</td>
+                    <td>${statusBadge}</td>
+                    <td style="font-size: 12px;">${reviewer}${comments}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('admTotalCount').textContent = total;
+            document.getElementById('admApprovedCount').textContent = approved;
+            document.getElementById('admPendingCount').textContent = pending;
+            document.getElementById('admRejectedCount').textContent = rejected;
+        }
+
+        // ERASE ALL LEAVE DETAILS
+        async function handleEraseAllLeaves() {
+            if (!confirm('⚠️ Are you sure you want to clear ALL leave request data?\n\nThis will permanently erase all submitted leave records from the database and reset all balances and tables.')) {
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/leave/clear-all', {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': 'Bearer ' + (authToken || ''),
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (res.ok) {
+                    showToast('🗑️ All leave requests have been cleared successfully!');
+                    previousStatusMap = {};
+                    sessionStorage.clear();
+                    
+                    // Refresh current active view
+                    const role = (currentUser && currentUser.role ? currentUser.role : '').toUpperCase();
+                    if (role === 'EMPLOYEE') {
+                        loadEmployeeLeaves();
+                    } else if (role === 'MANAGER') {
+                        loadManagerLeaves();
+                    } else {
+                        loadAdminAuditLeaves();
+                    }
+                } else {
+                    showToast('Failed to clear leave records.');
+                }
+            } catch (err) {
+                showToast('Network error while clearing data.');
+            }
+        }
+
+
+        // ==============================================================
+        // 4. APPLY LEAVE MODAL (EMPLOYEE ONLY)
+        // ==============================================================
+        function openLeaveModal() {
+            document.getElementById('leaveModal').classList.remove('hidden');
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('modalStartDate').value = today;
+            document.getElementById('modalEndDate').value = today;
+            calculateDuration();
+        }
+
+        function closeLeaveModal() {
+            document.getElementById('leaveModal').classList.add('hidden');
+            document.getElementById('leaveApplicationForm').reset();
+            document.getElementById('durationNotice').classList.add('hidden');
+        }
+
+        function calculateDuration() {
+            const start = document.getElementById('modalStartDate').value;
+            const end = document.getElementById('modalEndDate').value;
+            const notice = document.getElementById('durationNotice');
+            const noticeText = document.getElementById('durationNoticeText');
+
+            if (!start || !end) {
+                notice.classList.add('hidden');
+                return;
+            }
+
+            const d1 = new Date(start);
+            const d2 = new Date(end);
+
+            if (d1 > d2) {
+                notice.classList.remove('hidden');
+                notice.style.background = 'var(--danger-light)';
+                notice.style.color = 'var(--danger)';
+                noticeText.textContent = 'End date cannot be earlier than start date.';
+                return;
+            }
+
+            const diffTime = Math.abs(d2 - d1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+            notice.classList.remove('hidden');
+            notice.style.background = 'var(--primary-light)';
+            notice.style.color = 'var(--primary)';
+            noticeText.textContent = `Calculated Duration: ${diffDays} working ${diffDays === 1 ? 'day' : 'days'}`;
+        }
+
+        async function handleApplyLeave(e) {
+            e.preventDefault();
+
+            const leaveType = document.getElementById('modalLeaveType').value;
+            const startDate = document.getElementById('modalStartDate').value;
+            const endDate = document.getElementById('modalEndDate').value;
+            const reason = document.getElementById('modalReason').value.trim();
+
+            if (new Date(startDate) > new Date(endDate)) {
+                alert("Start date cannot be after end date.");
+                return;
+            }
+
+            const btn = document.getElementById('btnSubmitLeave');
+            btn.disabled = true;
+            btnText = btn.textContent;
+            btn.textContent = 'Submitting...';
+
+            try {
+                const res = await fetch('/api/leave/apply', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ leaveType, startDate, endDate, reason })
+                });
+
+                if (res.ok) {
+                    showToast('Leave request sent to manager!');
+                    closeLeaveModal();
+                    loadEmployeeLeaves();
+                } else {
+                    const err = await res.json();
+                    alert(err.message || 'Failed to submit leave.');
+                }
+            } catch (err) {
+                alert('Network error while submitting.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Send Request to Manager';
+            }
+        }
+
+        // Toast Helper
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<span>💬</span> <span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.25s';
+                setTimeout(() => toast.remove(), 250);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

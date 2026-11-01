@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Employee Leave Management System - Project Presentation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #1a1a2e;
+    color: white;
+    overflow: hidden;
+  }
+  .slide {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    padding: 60px;
+    position: relative;
+    background: linear-gradient(135deg, #1e3a5f, #2a5298);
+  }
+  .slide.active { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+  
+  /* Title Slide */
+  .title-slide { text-align: center; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+  .title-slide h1 { font-size: 52px; font-weight: 700; margin-bottom: 30px; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+  .title-slide .subtitle { font-size: 28px; margin-bottom: 50px; color: #64b5f6; }
+  .title-slide .student-info { 
+    background: rgba(255,255,255,0.1); 
+    padding: 30px 50px; 
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    margin-top: 40px;
+  }
+  .title-slide .student-info p { font-size: 22px; margin: 12px 0; letter-spacing: 1px; }
+  .title-slide .course { font-size: 18px; color: #90caf9; margin-top: 20px; font-weight: 600; }
+  
+  /* Content Slides */
+  h2 { font-size: 42px; margin-bottom: 40px; color: #ffd740; text-align: center; text-shadow: 2px 2px 6px rgba(0,0,0,0.3); }
+  h3 { font-size: 32px; margin-bottom: 25px; color: #81c784; }
+  ul { list-style: none; padding: 0; max-width: 900px; }
+  li { 
+    font-size: 22px; 
+    margin: 18px 0; 
+    padding: 15px 20px;
+    background: rgba(255,255,255,0.08);
+    border-left: 5px solid #64b5f6;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+  }
+  li strong { color: #ffd740; font-weight: 600; }
+  
+  .two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+  }
+  .column { background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; backdrop-filter: blur(5px); }
+  
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  .tech-badge {
+    background: rgba(255,255,255,0.12);
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 20px;
+    font-weight: 600;
+    border: 2px solid #64b5f6;
+    backdrop-filter: blur(10px);
+  }
+  
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    width: 100%;
+    max-width: 1000px;
+  }
+  .feature-card {
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 5px solid #81c784;
+    backdrop-filter: blur(5px);
+  }
+  .feature-card h4 { font-size: 24px; color: #ffd740; margin-bottom: 12px; }
+  .feature-card p { font-size: 18px; line-height: 1.6; color: #e0e0e0; }
+  
+  /* Thank You Slide */
+  .thankyou-slide {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    text-align: center;
+  }
+  .thankyou-slide h1 { font-size: 80px; font-weight: 700; color: #ffd740; text-shadow: 3px 3px 10px rgba(0,0,0,0.5); }
+  .thankyou-slide p { font-size: 32px; margin-top: 30px; color: #90caf9; }
+  
+  /* Navigation */
+  .nav {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 20px;
+    z-index: 1000;
+  }
+  .nav button {
+    background: rgba(255,255,255,0.15);
+    border: 2px solid #64b5f6;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+  }
+  .nav button:hover { background: rgba(100,181,246,0.3); transform: scale(1.05); }
+  .nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+  
+  .slide-number {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: rgba(255,255,255,0.15);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    backdrop-filter: blur(10px);
+  }
+  
+  @media print {
+    .slide { page-break-after: always; display: block !important; }
+    .nav, .slide-number { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slide-number" id="slideNum">Slide 1 of 9</div>
+
+<!-- Slide 1: Title -->
+<div class="slide active title-slide">
+  <h1>🏢 Employee Leave Management System</h1>
+  <p class="subtitle">with Automated Testing and Deployment</p>
+  <div class="student-info">
+    <p><strong>Presented by:</strong> Yagahanumanthan.C</p>
+    <p><strong>Registration No:</strong> 22MIC0155</p>
+    <p class="course">CSI3025 - Application Development and Deployment Architecture</p>
+  </div>
+</div>
+
+<!-- Slide 2: Project Overview -->
+<div class="slide">
+  <h2>📋 Project Overview</h2>
+  <ul>
+    <li><strong>Objective:</strong> Full-stack web application for managing employee leave requests with role-based access control</li>
+    <li><strong>Architecture:</strong> RESTful API backend with Spring Boot and web-based frontend</li>
+    <li><strong>Security:</strong> JWT-based authentication with encrypted passwords (BCrypt)</li>
+    <li><strong>Database:</strong> MySQL for production, H2 in-memory for testing</li>
+    <li><strong>Testing:</strong> Comprehensive JUnit 5 unit tests with Mockito</li>
+    <li><strong>CI/CD:</strong> Jenkins pipeline for automated build, test, and deployment</li>
+  </ul>
+</div>
+
+<!-- Slide 3: Technology Stack -->
+<div class="slide">
+  <h2>🛠️ Technology Stack</h2>
+  <div class="tech-stack">
+    <div class="tech-badge">☕ Java 17</div>
+    <div class="tech-badge">🍃 Spring Boot 3.2.5</div>
+    <div class="tech-badge">🔒 Spring Security</div>
+    <div class="tech-badge">🔑 JWT (jjwt 0.11.5)</div>
+    <div class="tech-badge">📦 Maven</div>
+    <div class="tech-badge">🗄️ MySQL 8</div>
+    <div class="tech-badge">💾 H2 Database</div>
+    <div class="tech-badge">🧪 JUnit 5</div>
+    <div class="tech-badge">🎭 Mockito</div>
+    <div class="tech-badge">🔄 Jenkins</div>
+    <div class="tech-badge">🐙 Git & GitHub</div>
+    <div class="tech-badge">🌐 HTML/CSS/JavaScript</div>
+  </div>
+</div>
+
+<!-- Slide 4: System Architecture -->
+<div class="slide">
+  <h2>🏗️ System Architecture</h2>
+  <div class="two-column">
+    <div class="column">
+      <h3>Backend (Spring Boot)</h3>
+      <ul>
+        <li><strong>Controller Layer:</strong> REST API endpoints</li>
+        <li><strong>Service Layer:</strong> Business logic & validation</li>
+        <li><strong>Repository Layer:</strong> JPA data access</li>
+        <li><strong>Security Layer:</strong> JWT filter & authentication</li>
+        <li><strong>Exception Handler:</strong> Global error handling</li>
+      </ul>
+    </div>
+    <div class="column">
+      <h3>Frontend (Web UI)</h3>
+      <ul>
+        <li><strong>Login Page:</strong> JWT authentication</li>
+        <li><strong>Employee Dashboard:</strong> Apply & view leaves</li>
+        <li><strong>Manager Dashboard:</strong> Approve/reject requests</li>
+        <li><strong>Admin Panel:</strong> User & leave type management</li>
+        <li><strong>Reports:</strong> Leave history & analytics</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5: Key Features -->
+<div class="slide">
+  <h2>✨ Key Features</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h4>🔐 Role-Based Access</h4>
+      <p>Three roles: Employee, Manager, Admin with specific permissions and workflow controls</p>
+    </div>
+    <div class="feature-card">
+      <h4>📝 Leave Application</h4>
+      <p>Employees apply for leave with automatic balance checking and date validation</p>
+    </div>
+    <div class="feature-card">
+      <h4>✅ Approval Workflow</h4>
+      <p>Managers review, approve, or reject leave requests with comments</p>
+    </div>
+    <div class="feature-card">
+      <h4>⚠️ Overlap Detection</h4>
+      <p>System prevents overlapping leave dates for the same employee</p>
+    </div>
+    <div class="feature-card">
+      <h4>💰 Balance Tracking</h4>
+      <p>Real-time leave balance calculation with year-wise tracking</p>
+    </div>
+    <div class="feature-card">
+      <h4>👥 User Management</h4>
+      <p>Admin can register users, assign roles, and manage leave types</p>
+    </div>
+    <div class="feature-card">
+      <h4>📊 Reports & History</h4>
+      <p>Complete leave history with filters and date range queries</p>
+    </div>
+    <div class="feature-card">
+      <h4>🧪 Automated Testing</h4>
+      <p>JUnit 5 unit tests covering all business logic and validation</p>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 6: Database Schema -->
+<div class="slide">
+  <h2>🗄️ Database Design</h2>
+  <ul>
+    <li><strong>USERS:</strong> Employee details with role (Employee/Manager/Admin), email, encrypted password, department</li>
+    <li><strong>LEAVE_TYPES:</strong> Configurable leave categories (Annual, Sick, Casual, Maternity, Paternity) with max days per year</li>
+    <li><strong>LEAVE_BALANCES:</strong> Track total, used, and remaining days for each employee per leave type and year</li>
+    <li><strong>LEAVE_REQUESTS:</strong> Leave applications with status (Pending/Approved/Rejected/Cancelled), dates, reason, and reviewer comments</li>
+    <li><strong>Relationships:</strong> Foreign keys linking users to their leave balances and requests, maintaining referential integrity</li>
+  </ul>
+</div>
+
+<!-- Slide 7: Security Implementation -->
+<div class="slide">
+  <h2>🔒 Security & Authentication</h2>
+  <ul>
+    <li><strong>JWT Tokens:</strong> Stateless authentication with HMAC-SHA256 signed tokens, 24-hour expiration</li>
+    <li><strong>Password Encryption:</strong> BCrypt hashing with salt for secure password storage</li>
+    <li><strong>Role-Based Authorization:</strong> Spring Security @PreAuthorize annotations on endpoints</li>
+    <li><strong>Security Filter Chain:</strong> Custom JWT filter validates token on every request before controller access</li>
+    <li><strong>CORS Configuration:</strong> Controlled cross-origin access with whitelisted domains</li>
+    <li><strong>Session Management:</strong> Stateless sessions (no cookies) - pure REST API design</li>
+  </ul>
+</div>
+
+<!-- Slide 8: Testing & CI/CD -->
+<div class="slide">
+  <h2>🧪 Testing & Deployment</h2>
+  <div class="two-column">
+    <div class="column">
+      <h3>Automated Testing</h3>
+      <ul>
+        <li><strong>Unit Tests:</strong> JUnit 5 with Mockito for service layer</li>
+        <li><strong>Test Coverage:</strong> Business logic validation, overlap checks, balance calculations</li>
+        <li><strong>Mock Database:</strong> H2 in-memory for fast test execution</li>
+        <li><strong>CI Integration:</strong> Tests run on every commit</li>
+      </ul>
+    </div>
+    <div class="column">
+      <h3>Jenkins CI/CD Pipeline</h3>
+      <ul>
+        <li><strong>Build:</strong> Maven compile with dependency resolution</li>
+        <li><strong>Test:</strong> Execute JUnit test suite</li>
+        <li><strong>Package:</strong> Generate executable JAR artifact</li>
+        <li><strong>Deploy:</strong> Automated deployment to staging/production</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Thank You -->
+<div class="slide thankyou-slide">
+  <h1>Thank You! 🙏</h1>
+  <p>Questions & Feedback Welcome</p>
+  <div style="margin-top: 60px; font-size: 20px; color: #90caf9;">
+    <p>Yagahanumanthan.C | 22MIC0155</p>
+    <p style="margin-top: 10px;">CSI3025 - Application Development and Deployment Architecture</p>
+  </div>
+</div>
+
+<!-- Navigation -->
+<div class="nav">
+  <button onclick="prevSlide()" id="prevBtn">← Previous</button>
+  <button onclick="nextSlide()" id="nextBtn">Next →</button>
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+
+function showSlide(n) {
+  slides.forEach((slide, index) => {
+    slide.classList.remove('active');
+    if (index === n) slide.classList.add('active');
+  });
+  
+  document.getElementById('slideNum').textContent = `Slide ${n + 1} of ${totalSlides}`;
+  document.getElementById('prevBtn').disabled = n === 0;
+  document.getElementById('nextBtn').disabled = n === totalSlides - 1;
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides - 1) {
+    currentSlide++;
+    showSlide(currentSlide);
+  }
+}
+
+function prevSlide() {
+  if (currentSlide > 0) {
+    currentSlide--;
+    showSlide(currentSlide);
+  }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+
+showSlide(0);
+</script>
+</body>
+</html>
